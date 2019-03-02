@@ -11,19 +11,21 @@ import { Credentials } from './RedditCredentials';
 
 let reddit = new RedditClient(
   Credentials.clientId,
-  Credentials.secret,
-  Credentials.redirectUri
-  );
+  Credentials.secret
+);
 
 reddit.callback = (reddit: RedditClient) => {
   const scaler = new WallpaperScaler();
-  scaler.run(reddit);
+  //Set the instance id for Waifu2x.me here 
+  //scaler.waifuInstanceId = '';
+  let username = 'moimart'; //Use you username
+  scaler.run(reddit,username);
 }
 
 /*
 async function _() {
   let w = new Waifu2x();
-  console.log('entering');
+  
   let files = await w.getFiles().catch(err => console.log(err));
 
   if (files != null) {

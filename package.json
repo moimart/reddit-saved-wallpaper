@@ -2,12 +2,10 @@
   "name": "reddit-saved-wallpaper",
   "version": "0.0.1",
   "description": "Scale up and save your reddit saved wallpapers",
-  "main": "index.js",
-  "bin": {
-    "make-icns": "./bin/make-icns"
-  },
+  "main": "build/index.js",
   "scripts": {
-    "build": "webpack"
+    "build": "webpack",
+    "start": "node build/index.js"
   },
   "keywords": [
     "reddit",
@@ -16,7 +14,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": ""
+    "url": "https://github.com/moimart/reddit-saved-wallpaper"
   },
   "preferGlobal": true,
   "author": "Moises Martinez <moises@kikkei.com>",

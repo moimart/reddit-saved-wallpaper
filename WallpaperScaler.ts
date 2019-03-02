@@ -6,6 +6,7 @@ import {Waifu2x} from './Waifu2x';
 
 export class WallpaperScaler {
     private path: string = './test';  //'/Users/moimart/wp';
+    public waifuInstanceId:string = '';
     async saveFromUrl(url: string): Promise<Buffer> {
         return new Promise<Buffer>((resolve, reject) => {
             fetch(url)
@@ -37,9 +38,8 @@ export class WallpaperScaler {
             if (metadata.width >= 3840) {
                 this.saveToDisk(resolve, buffer, reddit, post, filePath);
             } else if (metadata.width > metadata.height) {
-                resolve('not scaled');
-                return;
-                let waifu2x = new Waifu2x();
+  
+                let waifu2x = new Waifu2x(this.waifuInstanceId);
 
                 let res = await waifu2x.scale(Buffer.from(buffer), metadata).catch(err => console.log(err));
                 if (!res) {
@@ -60,11 +60,11 @@ export class WallpaperScaler {
             }*/
         });
     }
-    async run(reddit: RedditClient) {
+    async run(reddit: RedditClient,username: string) {
         try {
-            let _array = await reddit.getSaved();
+            let posts = await reddit.getSaved(username);
 
-            for (let post of _array) {
+            for (let post of posts) {
                 let file = await this.saveImage(reddit, post);
                 console.log(file);
             }

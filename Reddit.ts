@@ -16,14 +16,13 @@ export class RedditClient {
     private secret:string = '';
     private app = xp();
     public code:string = '';
-    public redirectUri = "";
+    public redirectUri = 'http%3A%2F%2Flocalhost%3A8080';;
 
     public callback:RedditFunction = null;
 
-    constructor(clientId:string = "", secret:string = "", redirectUri:string = "") {
+    constructor(clientId:string, secret:string) {
         this.clientId = clientId;
         this.secret = secret;
-        this.redirectUri = redirectUri;
 
         this.app.get('/', async (req, res) => {
             res.send("OK");
@@ -64,14 +63,14 @@ export class RedditClient {
         });
     }
 
-    async getSaved(): Promise<Array<Post>> {
+    async getSaved(user:string): Promise<Array<Post>> {
         return new Promise<Array<Post>>((resolve, reject) => {
 
             if (this.token == "") {
                 return reject();
             }
 
-            fetch('https://oauth.reddit.com/user/moimart/saved?limit=100&count=100', {
+            fetch(`https://oauth.reddit.com/user/${user}/saved?limit=100&count=100`, {
                 method: 'GET',
                 headers: {
                     'Authorization': 'Bearer ' + this.token
