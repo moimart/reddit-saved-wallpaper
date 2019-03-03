@@ -32,6 +32,10 @@ export class WallpaperScaler {
             let image = sharp(buffer);
             const metadata: sharp.Metadata = await image.metadata().catch(err => reject(err)) as sharp.Metadata;
 
+            if (metadata == null) {
+                return resolve('wrong format');
+            }
+
             let r = Math.random().toString(36).substring(7);
             let filePath = this.path + '/' + r + '.' + metadata.format;
 
