@@ -16,13 +16,15 @@ export class RedditClient {
     private secret:string = '';
     private app = xp();
     public code:string = '';
-    public redirectUri = 'http%3A%2F%2Flocalhost%3A8080';;
+    private port = "8082";
+    public redirectUri = 'http%3A%2F%2Flocalhost%3A';;
 
     public callback:RedditFunction = null;
 
     constructor(clientId:string, secret:string) {
         this.clientId = clientId;
         this.secret = secret;
+        this.redirectUri += this.port;
 
         this.app.get('/', async (req, res) => {
             res.send("OK");
@@ -35,12 +37,12 @@ export class RedditClient {
             }
         });
 
-        this.app.listen(8080, () => {
-            console.log('script started at 8080');
+        this.app.listen(this.port, () => {
+            console.log('script started at ' + this.port);
         });
 
         opn(`https://www.reddit.com/api/v1/authorize?client_id=${this.clientId}&response_type=code&state=pepe&redirect_uri=${this.redirectUri}&duration=permanent&scope=history+save`)
-            .then(() => {});
+            .then(() => console.log('opening reddit...'));
     }
 
     async auth(): Promise<string> {

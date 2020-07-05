@@ -5,6 +5,8 @@ import {Post, RedditClient} from './Reddit';
 import {Waifu2x} from './Waifu2x';
 
 export class WallpaperScaler {
+    public minResolution = 3840;
+    public unsaveRedditPost = true;
     private path: string = './test';  //'/Users/moimart/wp';
     public waifuInstanceId:string = '';
     async saveFromUrl(url: string): Promise<Buffer> {
@@ -19,7 +21,9 @@ export class WallpaperScaler {
     saveToDisk(resolve, buffer: Buffer, reddit: RedditClient, post: Post, filePath: string) {
         writeFile(filePath, Buffer.from(buffer), async (err) => {
             err && console.log(err);
-            await reddit.unsavePost(post.post['data']['name']).catch(() => console.log('could not unsave'));
+            if (this.unsaveRedditPost) {
+                await reddit.unsavePost(post.post['data']['name']).catch(() => console.log('could not unsave'));
+            }
             !err && resolve(filePath);
         });
     }
@@ -39,10 +43,11 @@ export class WallpaperScaler {
             let r = Math.random().toString(36).substring(7);
             let filePath = this.path + '/' + r + '.' + metadata.format;
 
-            if (metadata.width >= 3840) {
+            if (metadata.width >= this.minResolution) {
                 this.saveToDisk(resolve, buffer, reddit, post, filePath);
             } else if (metadata.width > metadata.height) {
-  
+                resolve('needs scaling');
+                return; /* enable the code for a SaaS scaler below this */
                 let waifu2x = new Waifu2x(this.waifuInstanceId);
 
                 let res = await waifu2x.scale(Buffer.from(buffer), metadata).catch(err => console.log(err));
@@ -59,9 +64,9 @@ export class WallpaperScaler {
                 */
                resolve(res as string);
                 
-            }/* else {
-                resolve('not ok');
-            }*/
+            }
+
+            resolve('not ok');
         });
     }
     async run(reddit: RedditClient,username: string) {

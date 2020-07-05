@@ -1,6 +1,6 @@
 {
   "name": "reddit-saved-wallpaper",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Scale up and save your reddit saved wallpapers",
   "main": "build/index.js",
   "scripts": {

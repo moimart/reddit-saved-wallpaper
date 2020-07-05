@@ -18,6 +18,10 @@ reddit.callback = (reddit: RedditClient) => {
   const scaler = new WallpaperScaler();
   //Set the instance id for Waifu2x.me here 
   //scaler.waifuInstanceId = '';
+  //Change the minimum resolution here; default is 3840
+  //scaler.minResolution = 2560;
+  //Don't unsave your posts from Reddit; default is true
+  //scaler.unsaveRedditPost = false;
   let username = 'moimart'; //Use you username
   scaler.run(reddit,username);
 }
